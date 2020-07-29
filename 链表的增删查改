@@ -1,0 +1,151 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct Node LIST;
+
+struct Node 
+{
+    int value;
+    LIST* next_value_addrs;
+};
+/*
+    尾插法创建链表
+*/
+LIST* CreateAList(LIST* L,int length)
+{
+    LIST* q=NULL,*p=L;  
+    for(int i=0;i<length;i++)
+    {
+        q=(LIST*)malloc(sizeof(LIST));
+        q->value=rand()%100+98;
+        if(L==NULL)
+            L->next_value_addrs=q;
+        else
+            p->next_value_addrs=q;  
+        p=q; 
+    }
+    q->next_value_addrs=NULL;
+    return L;
+}
+int Find_List_Length(LIST* L)
+{
+    int count=0;
+    while(L->next_value_addrs!=NULL)
+    {
+        ++count;
+        L=L->next_value_addrs;
+    }
+    return count;
+}
+LIST* Find(LIST* L,int be_found_value)
+{
+    LIST* P;
+    P=L->next_value_addrs;
+    while(P->next_value_addrs!=NULL && P->value!=be_found_value)
+        P=P->next_value_addrs;
+    return P;
+        
+}
+LIST* Findprevious(LIST* L,int value)
+{
+    LIST* P;
+    P=L;
+    while(P->next_value_addrs!=NULL && P->next_value_addrs->value!=value)
+        P=P->next_value_addrs;
+    return P;
+}
+
+void Insert_value(LIST* L,int values,int be_inserted_value)
+{
+    LIST* Tmptell,*P;
+    P=L;
+    P=Findprevious(L,be_inserted_value);
+    if(P->next_value_addrs==NULL)
+    {
+        printf ("cant find that be inserted value\n");
+    }
+    else 
+    {
+        Tmptell=(LIST*)malloc(sizeof(LIST));
+        Tmptell->value=values;
+        Tmptell->next_value_addrs=P->next_value_addrs;
+        P->next_value_addrs=Tmptell;
+    }
+
+}
+void Delete_value(LIST* L,int values)
+{
+    LIST* Tmptell,*P;
+    P=L;
+    P=Findprevious(L,values);
+    if(P->next_value_addrs==NULL)
+    {
+        printf ("cant find that be deleted values\n");
+    }
+    else 
+    {
+        Tmptell=(LIST*)malloc(sizeof(LIST));
+        Tmptell=P->next_value_addrs;
+        P->next_value_addrs=Tmptell->next_value_addrs;
+        free(Tmptell);
+    }
+}
+void Delete_All_LIST(LIST* L)
+{
+    LIST* P,*Tmp;
+    P=L->next_value_addrs;//假设表头存在
+    L->next_value_addrs=NULL;
+    while(P!=NULL)
+    {
+        Tmp=P->next_value_addrs;
+        free(P);
+        P=Tmp;
+    }
+}
+void Out_list(LIST* L)
+{
+    while(L->next_value_addrs!=NULL)
+    {
+        printf("%d ",L->next_value_addrs->value);
+        L=L->next_value_addrs;
+    }
+    printf("\n");
+}
+void test_Create_LIST()
+{
+    LIST* L;
+    int length=10;
+    L=(LIST*)malloc(sizeof(LIST));
+    L->next_value_addrs=NULL;
+    L=CreateAList(L,length);
+    Out_list(L);
+}
+
+void test_Insert_LIST()
+{
+    LIST* L;
+    int length=10;
+    L=(LIST*)malloc(sizeof(LIST));
+    L->next_value_addrs=NULL;
+    L=CreateAList(L,length);
+    Out_list(L);
+    Insert_value(L,10,13);
+    Out_list(L);
+}
+
+void test_Delete_LIST()
+{
+    LIST* L;
+    int length=10;
+    L=(LIST*)malloc(sizeof(LIST));
+    L->next_value_addrs=NULL;
+    L=CreateAList(L,length);
+    Out_list(L);
+    Delete_value(L,1);
+    Out_list(L);
+    Delete_All_LIST(L);
+    Out_list(L);
+}
+int main()
+{
+    test_Delete_LIST();
+}
