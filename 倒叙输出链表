@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct Node LIST;
+struct Node
+{
+    int values;
+    LIST* next_values_addrs;
+};
+
+LIST* CreateAList(LIST* s,int length)
+{
+    LIST* q=NULL;
+    LIST* p=s;
+    for(int i=0;i<length;i++)
+    {
+        q=(LIST*)malloc(sizeof(LIST));
+        q->values=rand()%100+98;
+
+        if(s==NULL)
+            s->next_values_addrs=q;
+        else
+            p->next_values_addrs=q;
+        p=q;
+    }
+    q->next_values_addrs=NULL;
+    return s;
+}
+
+void Out(LIST* L)
+{
+    while(L->next_values_addrs!=NULL)
+    {
+        printf("%d ",L->next_values_addrs->values);
+        L=L->next_values_addrs;
+    }
+    printf("\n");
+}
+/*
+    利用递归倒叙输出链表（不改变链表本省）
+    缺点：大规模的链表容易引发函数调用栈溢出
+*/
+void PrintListReverSinglely(LIST* s)
+{
+    if(s!=NULL)
+    {
+        if(s->next_values_addrs!=NULL)
+            PrintListReverSinglely(s->next_values_addrs);
+        printf("%d ",s->values);
+    }
+}
+
+
+void test()
+{
+    LIST* L;
+    L=(LIST*)malloc(sizeof(LIST));
+    L->next_values_addrs=NULL;
+    L=CreateAList(L,10);
+    Out(L);
+    PrintListReverSinglely(L);
+}
+
+int main()
+{
+    test();
+}
